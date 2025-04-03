@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Personal Portfolio</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Variables for Easy Theming */
+        :root {
+            /* Light Theme Colors */
+            --bg-primary: #f4f6f9;
+            --text-primary: #333;
+            --accent-color: #3498db;
+            
+            /* Skill Level Colors */
+            --learning-color: #FF6B6B;     /* Red */
+            --intermediate-color: #FFD93D; /* Yellow */
+            --advanced-color: #6BCB77;     /* Green */
+
+            /* Dark Theme Colors */
+            --dark-bg: #121212;
+            --dark-text: #e0e0e0;
+        }
+
+        /* CSS Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        /* Dark Theme Styles */
+        body.dark-theme {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        /* Container and Layout */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation Styles */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: darken(var(--accent-color), 20%);
+        }
+
+        /* Header/Profile Section */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin: 50px 0;
+            font-size:20px;
+        }
+
+        .profile-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-color);
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section h2 {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /*Hobbies Styles */
+        .hobbies-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        
+        /* Hobby List */
+        .hobbies-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .hobby {
+            padding: 10px 15px;
+            background: #3498db;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .hobby:hover {
+            background: #217dbb;
+        }
+        
+        /* Hobby Box (Initially Hidden) */
+        .hobby-box {
+            display: none;
+            flex-direction: column;
+            width: 55%;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transform-origin: left center;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        /* Photo Gallery */
+        .photo-gallery {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .photo-gallery img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .photo-gallery img:hover {
+            transform: scale(1.1);
+        }
+        
+
+        /* Skills Table Styles */
+        .skills-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .skills-table th, 
+        .skills-table td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .skills-table th {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .skills-level-box {
+            display: block;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        /* Skill Level Colors */
+        .learning { 
+            background-color: var(--learning-color); 
+            color: white; 
+        }
+        .intermediate { 
+            background-color: var(--intermediate-color); 
+            color: black; 
+        }
+        .advanced { 
+            background-color: var(--advanced-color); 
+            color: white; 
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background-color: rgb(152, 153, 153);
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Theme Toggle */
+        #theme-toggle {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .logo {
+            font-size:50px;
+        }
+
+        .container1 {
+            background: grey;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 1100px;
+        }
+        label, input, textarea {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        input, textarea {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .social-icons {
+            margin-top: 40px;
+            background-color: white;
+            height:60px;
+            display:flex;
+            justify-content: center;
+        }
+        .social-icons a {
+            margin: 0 10px;
+            display: inline-block;
+        }
+        .social-icons img {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <div class="logo">MY PORTFOLIO</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#academic-journey">Academic Journey</a></li>
+            </ul>
+            <button id="theme-toggle">Set Theme</button>
+        </nav>
+
+        <!-- Home/Profile Section -->
+        <div class="header" id="home">
+            <img src="nj.jpg" alt="Profile" class="profile-image">
+            <div>
+                <h1>I am Nikit Joshi</h1>
+                <p>graduating in Vellore Institute of Technology, Chennai</p>
+                <p>pursuing CSE with specialisation in Artificial Intelligence and Robotics</p>
+                <p>Passionate about creating innovative web solutions and exploring new technologies.</p>
+            </div>
+        </div>
+
+        <!-- Hobbies Section-->
+        <div class="section" id="hobbies">
+            <h2>My Hobbies</h2>
+            <p>click on the hobby to see the pictures..</p>
+            <div class="hobbies-container">
+                <!-- Hobby List -->
+                <div class="hobbies-list">
+                    <div class="hobby" onclick="showHobby('photography')">Photography</div>
+                    <div class="hobby" onclick="showHobby('sketching')">Sketching</div>
+                    <div class="hobby" onclick="showHobby('chess')">Chess</div>
+                </div>
+    
+                <!-- Hobby Details (Initially Hidden) -->
+                <div class="hobby-box" id="photography-box">
+                    <h3>Photography</h3>
+                    <div class="photo-gallery">
+                        <img src="1.jpg" alt="Photography 1">
+                        <img src="2.jpg" alt="Photography 2">
+                        <img src="3.jpg" alt="Photography 3">
+                    </div>
+                </div>
+    
+                <div class="hobby-box" id="sketching-box">
+                    <h3>Sketching</h3>
+                    <div class="photo-gallery">
+                        <img src="4.jpg" alt="sketching 1">
+                        <img src="5.jpg" alt="sketching 2">
+                        <img src="6.jpg" alt="sketching 3">
+                    </div>
+                </div>
+    
+                <div class="hobby-box" id="chess-box">
+                    <h3>Chess</h3>
+                    <div class="photo-gallery">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="section" id="skills">
+            <h2>My Skills</h2>
+            <table class="skills-table">
+                <thead>
+                    <tr>
+                        <th>Language/Technology</th>
+                        <th>Learning</th>
+                        <th>Intermediate</th>
+                        <th>Advanced</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>HTML</td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="skills-level-box advanced">Advanced</span></td>
+                    </tr>
+                    <tr>
+                        <td>CSS</td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="skills-level-box advanced">Advanced</span></td>
+                    </tr>
+                    <tr>
+                        <td>JavaScript</td>
+                        <td></td>
+                        <td><span class="skills-level-box intermediate">Intermediate</span></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>React</td>
+                        <td><span class="skills-level-box learning">Learning</span></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Python</td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="skills-level-box advanced">Advanced</span></td>
+                    </tr>
+                    <tr>
+                        <td>Java</td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="skills-level-box advanced">Advanced</span></td>
+                    </tr>
+                    <tr>
+                        <td>C++</td>
+                        <td></td>
+                        <td><span class="skills-level-box intermediate">Intermediate</span></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="section" id="projects">
+            <h2>Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>Portfolio Website</h3>
+                    <p>Responsive personal portfolio using modern web technologies</p>
+                </div>
+                <div class="project-card">
+                    <h3>Remote Control Car</h3>
+                    <p>using Arduino Uno and basic hardware-software integration</p>
+                </div>
+                <div class="project-card">
+                    <h3>AI powered student loan assistance</h3>
+                    <p>currently working on it</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Academic Journey Section -->
+        <div class="section" id="academic-journey">
+            <h2>Academic Performance</h2>
+            <p>The percentage scored in 10th, 12th and ongoing undergraduate so far, is given below in the graph.</p>
+            <p>hover over the small circles to see the exact percentage.</p><br/>
+            <canvas id="academic-chart"></canvas>
+        </div>
+
+        <!-- email,phone number, text -->
+        <h2>Fill in the Details</h2>
+        <div class="container1">
+            <form>
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required>
+                    
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+                    
+                <label for="message">Your Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                    
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <div class="social-icons">
+            <a href="https://www.linkedin.com" target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn">
+            </a>
+            <a href="https://www.github.com" target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function showHobby(hobby) {
+            let hobbyBox = document.getElementById(hobby + "-box");
+        
+            // Hide other hobby boxes
+            document.querySelectorAll('.hobby-box').forEach(box => {
+                if (box !== hobbyBox) {
+                    box.style.opacity = '0';
+                    box.style.transform = 'scale(0.9)';
+                    setTimeout(() => box.style.display = 'none', 300);
+                }
+            });
+        
+            // Show the selected hobby box
+            if (hobbyBox.style.display === "block") {
+                hobbyBox.style.opacity = '0';
+                hobbyBox.style.transform = 'scale(0.9)';
+                setTimeout(() => hobbyBox.style.display = 'none', 300);
+            } else {
+                hobbyBox.style.display = "block";
+                setTimeout(() => {
+                    hobbyBox.style.opacity = '1';
+                    hobbyBox.style.transform = 'scale(1)';
+                }, 10);
+            }
+        }
+        
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme Toggle Functionality
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-theme');
+            }
+
+            // Theme toggle event listener
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-theme');
+                const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
+                localStorage.setItem('theme', currentTheme);
+            });
+
+            // Smooth Scrolling for Navigation Links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Academic Journey Chart
+            const ctx = document.getElementById('academic-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['10th', '12th', 'Undergraduate'],
+                    datasets: [{
+                        label: 'Academic Performance',
+                        data: [96.4, 88.4, 86.7],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Academic Performance Journey'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Performance (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
